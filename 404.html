@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GitHub Pages Routing</title>
+</head>
+<body>
+  <div id="content"></div>
+
+  <script>
+    const path = window.location.pathname;
+    const segments = path.split('/').filter(Boolean);
+    const lastSegment = segments[segments.length - 1];
+
+    let message = '';
+    if (lastSegment === 'ebook') {
+      message = '<p>ebook</p>';
+    } else if (lastSegment === 'poster') {
+      message = '<p>poster</p>';
+    } else {
+      message = '<p>Not found</p>';
+    }
+
+    document.getElementById('content').innerHTML = message;
+  </script>
+</body>
+</html>
