@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dynamic Content</title>
+  <meta charset="UTF-8" />
+  <title>GitHub Pages Routing</title>
 </head>
 <body>
   <div id="content"></div>
 
   <script>
-    // Get the current path
     const path = window.location.pathname;
-
-    // Extract the last part of the path (e.g., "ebook" or "poster")
-    const segments = path.split('/').filter(Boolean); // removes empty strings
+    const segments = path.split('/').filter(Boolean);
     const lastSegment = segments[segments.length - 1];
 
-    // Decide what to display
     let message = '';
     if (lastSegment === 'ebook') {
       message = '<p>ebook</p>';
@@ -25,7 +21,6 @@
       message = '<p>Not found</p>';
     }
 
-    // Insert into the page
     document.getElementById('content').innerHTML = message;
   </script>
 </body>
