@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Content</title>
+</head>
+<body>
+  <div id="content"></div>
+
+  <script>
+    // Get the current path
+    const path = window.location.pathname;
+
+    // Extract the last part of the path (e.g., "ebook" or "poster")
+    const segments = path.split('/').filter(Boolean); // removes empty strings
+    const lastSegment = segments[segments.length - 1];
+
+    // Decide what to display
+    let message = '';
+    if (lastSegment === 'ebook') {
+      message = '<p>ebook</p>';
+    } else if (lastSegment === 'poster') {
+      message = '<p>poster</p>';
+    } else {
+      message = '<p>Not found</p>';
+    }
+
+    // Insert into the page
+    document.getElementById('content').innerHTML = message;
+  </script>
+</body>
+</html>
