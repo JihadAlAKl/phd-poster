@@ -2,26 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>GitHub Pages Routing</title>
+  <title>GitHub Pages Router</title>
 </head>
 <body>
-  <div id="content"></div>
+  <div id="content">Loading...</div>
 
   <script>
     const path = window.location.pathname;
     const segments = path.split('/').filter(Boolean);
     const lastSegment = segments[segments.length - 1];
 
-    let message = '';
     if (lastSegment === 'ebook') {
-      message = '<p>ebook</p>';
-    } else if (lastSegment === 'poster') {
-      message = '<p>poster</p>';
-    } else {
-      message = '<p>Not found</p>';
-    }
+      const a = document.createElement('a');
+      a.href = '/poster.pdf'; // File must be in the root of the repo
+      a.download = 'poster.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
 
-    document.getElementById('content').innerHTML = message;
+      document.getElementById('content').innerHTML = '<p>Downloading ebook (poster.pdf)...</p>';
+    } else if (lastSegment === 'poster') {
+      fetch('/poster.html')
+        .then(response => response.text())
+        .then(html => {
+          document.open();
+          document.write(html);
+          document.close();
+        })
+        .catch(err => {
+          document.getElementById('content').innerHTML = '<p>Failed to load game.</p>';
+          console.error(err);
+        });
+    } else {
+      document.getElementById('content').innerHTML = '<p>Page not found</p>';
+    }
   </script>
 </body>
 </html>
