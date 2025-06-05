@@ -368,7 +368,7 @@ function showContactInfoPanel() {
 
         /* Feedback button logic */
         let currentFeedbackBtnListener = null;
-        function setFeedbackButton(actionType) {
+        function setFeedbackButtonAction(actionType) {
             if (currentFeedbackBtnListener) feedbackActionButton.removeEventListener('click', currentFeedbackBtnListener);
             if (actionType === 'retry') {
                 feedbackActionButton.textContent = 'Retry';
