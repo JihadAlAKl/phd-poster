@@ -6,6 +6,7 @@
     <title>Tuberculosis Infection Game</title>
     <style>
         html, body {
+          padding-bottom: 80px;
             width: 100%;
             height: 100%;
             margin: 0;
@@ -15,7 +16,6 @@
             background-color: #f0f0f0; /* Fallback background */
             color: #333;
             text-align: center;
-            padding-bottom: 80px;
         }
 
         #game-container {
@@ -189,9 +189,9 @@
         let animationFrameId;
 
         const contactDetails = {
-            name: "Tofik laffik",
-            phone: "+96123433445",
-            email: "tofik@hotmail.com"
+            name: "Jihad Al Akl",
+            phone: "+96170533519",
+            email: "jihadalakl@hotmail.com"
         };
 
         const antidotes = [
@@ -317,7 +317,7 @@ END:VCARD`;
                 feedbackActionButton.classList.remove('contact-button');
                 currentFeedbackButtonListener = resetGame;
             } else if (actionType === 'contact') {
-                feedbackActionButton.textContent = `Add ${contactDetails.name.split(' ')[0]} as Contact`;
+                feedbackActionButton.textContent = `Lets be Friends!`;
                 feedbackActionButton.classList.remove('game-over');
                 feedbackActionButton.classList.add('contact-button');
                 currentFeedbackButtonListener = downloadVCard;
