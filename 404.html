@@ -13,7 +13,7 @@
     const lastSegment = segments[segments.length - 1];
 
     if (lastSegment === 'ebook') {
-      window.location.href = '/poster.pdf'; // Opens in-browser
+      window.location.href = '/phd-poster/poster.pdf'; // Opens in-browser
     } else if (lastSegment === 'poster') {
       fetch('/poster.html')
         .then(response => response.text())
