@@ -384,27 +384,27 @@ function showContactInfoPanel() {
             feedbackActionButton.addEventListener('click', currentFeedbackBtnListener);
         }
         // Store current listeners to remove them properly
-        let currentFeedbackButtonListener = null;
+        // let currentFeedbackButtonListener = null;
 
-        function setFeedbackButtonAction(actionType) {
-            // Remove previous listener if any
-            if (currentFeedbackButtonListener) {
-                feedbackActionButton.removeEventListener('click', currentFeedbackButtonListener);
-            }
+        // function setFeedbackButtonAction(actionType) {
+        //     // Remove previous listener if any
+        //     if (currentFeedbackButtonListener) {
+        //         feedbackActionButton.removeEventListener('click', currentFeedbackButtonListener);
+        //     }
 
-            if (actionType === 'retry') {
-                feedbackActionButton.textContent = "Retry";
-                feedbackActionButton.classList.add('game-over');
-                feedbackActionButton.classList.remove('contact-button');
-                currentFeedbackButtonListener = resetGame;
-            } else if (actionType === 'contact') {
-                feedbackActionButton.textContent = `Lets be Friends!`;
-                feedbackActionButton.classList.remove('game-over');
-                feedbackActionButton.classList.add('contact-button');
-                currentFeedbackButtonListener = downloadVCard;
-            }
-            feedbackActionButton.addEventListener('click', currentFeedbackButtonListener);
-        }
+        //     if (actionType === 'retry') {
+        //         feedbackActionButton.textContent = "Retry";
+        //         feedbackActionButton.classList.add('game-over');
+        //         feedbackActionButton.classList.remove('contact-button');
+        //         currentFeedbackButtonListener = resetGame;
+        //     } else if (actionType === 'contact') {
+        //         feedbackActionButton.textContent = `Lets be Friends!`;
+        //         feedbackActionButton.classList.remove('game-over');
+        //         feedbackActionButton.classList.add('contact-button');
+        //         currentFeedbackButtonListener = downloadVCard;
+        //     }
+        //     feedbackActionButton.addEventListener('click', currentFeedbackButtonListener);
+        // }
 
 
         function handleAntidoteChoice(event) {
