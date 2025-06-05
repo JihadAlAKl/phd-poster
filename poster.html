@@ -356,6 +356,7 @@ END:VCARD`;
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            showContactInfoPanel();
             // Note: After downloading, the modal remains. User can close it or we can auto-close.
             // For now, it stays until they manually interact or if we add a close button to the modal.
         }
