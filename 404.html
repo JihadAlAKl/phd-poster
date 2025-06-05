@@ -13,14 +13,7 @@
     const lastSegment = segments[segments.length - 1];
 
     if (lastSegment === 'ebook') {
-      const a = document.createElement('a');
-      a.href = '/poster.pdf'; // File must be in the root of the repo
-      a.download = 'poster.pdf';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-
-      document.getElementById('content').innerHTML = '<p>Downloading ebook (poster.pdf)...</p>';
+      window.location.href = '/poster.pdf'; // Opens in-browser
     } else if (lastSegment === 'poster') {
       fetch('/poster.html')
         .then(response => response.text())
