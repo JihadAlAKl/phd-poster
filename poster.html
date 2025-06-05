@@ -189,9 +189,9 @@
         let animationFrameId;
 
         const contactDetails = {
-            name: "Tofik laffik",
-            phone: "+96123433445",
-            email: "tofik@hotmail.com"
+            name: "Jihad Al Akl",
+            phone: "+96170533519",
+            email: "jihadalakl@hotmail.com"
         };
 
         const antidotes = [
@@ -317,7 +317,7 @@ END:VCARD`;
                 feedbackActionButton.classList.remove('contact-button');
                 currentFeedbackButtonListener = resetGame;
             } else if (actionType === 'contact') {
-                feedbackActionButton.textContent = `Add ${contactDetails.name.split(' ')[0]} as Contact`;
+                feedbackActionButton.textContent = `Lets be Friends!`;
                 feedbackActionButton.classList.remove('game-over');
                 feedbackActionButton.classList.add('contact-button');
                 currentFeedbackButtonListener = downloadVCard;
