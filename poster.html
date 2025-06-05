@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tuberculosis Infection Game</title>
+    <style>
+        html, body {
+          padding-bottom: 80px;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrollbars */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0; /* Fallback background */
+            color: #333;
+            text-align: center;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            background-color: #fff;
+            /* border: 2px solid #ccc; Remove border for fullscreen */
+            /* box-shadow: 0 0 15px rgba(0,0,0,0.2); Remove shadow */
+            display: flex; /* For centering canvas if needed, though it's 100% */
+            align-items: center;
+            justify-content: center;
+        }
+
+        #lungs-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Adjust to 'cover' if you want it to fill, might crop */
+            z-index: 1;
+        }
+
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        #info-panel {
+            position: absolute;
+            top: 20px; /* Adjusted for fullscreen */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 8px;
+            z-index: 3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: calc(100vw - 10px);
+        }
+
+        #info-panel h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.2em;
+            color: #d9534f;
+        }
+
+        #button-container {
+            position: absolute;
+            bottom: 30px; /* Adjusted for fullscreen */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column; /* Stack buttons on mobile if space is tight */
+            gap: 10px;
+            z-index: 3;
+        }
+
+        .antidote-button {
+            padding: 12px 20px; /* Slightly larger buttons for touch */
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+            min-width: 200px; /* Ensure buttons have some width */
+        }
+
+        .antidote-button:hover {
+            background-color: #0056b3;
+        }
+
+        .antidote-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #feedback-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.88);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            z-index: 4;
+            display: none;
+            width: 85%;
+            max-width: 480px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+
+        #feedback-modal h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        #feedback-modal p {
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        #feedback-action-button { /* Renamed from retry-button for clarity */
+            padding: 12px 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #5cb85c; /* Default to "win" color */
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+         #feedback-action-button.game-over {
+            background-color: #d9534f;
+        }
+         #feedback-action-button.contact-button {
+            background-color: #007bff; /* Blue for contact button */
+        }
+
+
+        #feedback-action-button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <img id="lungs-image" src="l.png" alt="Human Lungs">
+        <canvas id="particle-canvas"></canvas>
+
+        <div id="info-panel">
+            <h2>Infected with: Mycobacterium tuberculosis</h2>
+            <p>Choose an antidote:</p>
+        </div>
+
+        <div id="button-container">
+            <!-- Buttons will be populated by JavaScript -->
+        </div>
+
+        <div id="feedback-modal">
+            <h3 id="feedback-title"></h3>
+            <p id="feedback-description"></p>
+            <button id="feedback-action-button">Retry</button> <!-- Default text -->
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        const gameContainer = document.getElementById('game-container');
+        const buttonContainer = document.getElementById('button-container');
+        const feedbackModal = document.getElementById('feedback-modal');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackDescription = document.getElementById('feedback-description');
+        const feedbackActionButton = document.getElementById('feedback-action-button'); // Updated ID
+        const infoPanel = document.getElementById('info-panel');
+
+        let particles = [];
+        const numParticles = 150; // Slightly more for larger screen
+        let currentParticleColor = 'orange';
+        let animationFrameId;
+
+        const contactDetails = {
+            name: "Tofik laffik",
+            phone: "+96123433445",
+            email: "tofik@hotmail.com"
+        };
+
+        const antidotes = [
+            {
+                name: "Penicillin",
+                correct: false,
+                reason: "Penicillin is ineffective against Mycobacterium tuberculosis due to its unique cell wall structure."
+            },
+            {
+                name: "Isoniazid + Rifampicin",
+                correct: true,
+                reason: "This combination therapy is highly effective! Isoniazid targets cell wall synthesis, and Rifampicin inhibits bacterial RNA polymerase."
+            },
+            {
+                name: "Aspirin",
+                correct: false,
+                reason: "Aspirin is an anti-inflammatory, not an antibiotic. It does not treat tuberculosis."
+            }
+        ];
+
+        class Particle {
+            constructor(x, y, radius, color, vx, vy) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.vx = vx;
+                this.vy = vy;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+                    this.vx *= -1;
+                    this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x)); // Contain
+                }
+                if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+                    this.vy *= -1;
+                    this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y)); // Contain
+                }
+                this.color = currentParticleColor;
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < numParticles; i++) {
+                const radius = Math.random() * 2.5 + 1.5; // Slightly larger particles
+                const x = Math.random() * (canvas.width - radius * 2) + radius;
+                const y = Math.random() * (canvas.height - radius * 2) + radius;
+                const vx = (Math.random() - 0.5) * 1.2;
+                const vy = (Math.random() - 0.5) * 1.2;
+                particles.push(new Particle(x, y, radius, currentParticleColor, vx, vy));
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => particle.update());
+            animationFrameId = requestAnimationFrame(animateParticles);
+        }
+
+        function populateButtons() {
+            buttonContainer.innerHTML = '';
+            const shuffledAntidotes = [...antidotes].sort(() => Math.random() - 0.5);
+
+            shuffledAntidotes.forEach(antidote => {
+                const button = document.createElement('button');
+                button.classList.add('antidote-button');
+                button.textContent = antidote.name;
+                button.dataset.correct = antidote.correct;
+                button.dataset.reason = antidote.reason;
+                button.addEventListener('click', handleAntidoteChoice);
+                buttonContainer.appendChild(button);
+            });
+        }
+
+        function downloadVCard() {
+            const vCardString = `BEGIN:VCARD
+VERSION:3.0
+FN:${contactDetails.name}
+N:${contactDetails.name.split(' ')[1]};${contactDetails.name.split(' ')[0]}
+TEL;TYPE=CELL:${contactDetails.phone}
+EMAIL:${contactDetails.email}
+END:VCARD`;
+
+            const blob = new Blob([vCardString], { type: "text/vcard;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${contactDetails.name.replace(' ', '_')}.vcf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            // Note: After downloading, the modal remains. User can close it or we can auto-close.
+            // For now, it stays until they manually interact or if we add a close button to the modal.
+        }
+
+        // Store current listeners to remove them properly
+        let currentFeedbackButtonListener = null;
+
+        function setFeedbackButtonAction(actionType) {
+            // Remove previous listener if any
+            if (currentFeedbackButtonListener) {
+                feedbackActionButton.removeEventListener('click', currentFeedbackButtonListener);
+            }
+
+            if (actionType === 'retry') {
+                feedbackActionButton.textContent = "Retry";
+                feedbackActionButton.classList.add('game-over');
+                feedbackActionButton.classList.remove('contact-button');
+                currentFeedbackButtonListener = resetGame;
+            } else if (actionType === 'contact') {
+                feedbackActionButton.textContent = `Add ${contactDetails.name.split(' ')[0]} as Contact`;
+                feedbackActionButton.classList.remove('game-over');
+                feedbackActionButton.classList.add('contact-button');
+                currentFeedbackButtonListener = downloadVCard;
+            }
+            feedbackActionButton.addEventListener('click', currentFeedbackButtonListener);
+        }
+
+
+        function handleAntidoteChoice(event) {
+            const chosenButton = event.target;
+            const isCorrect = chosenButton.dataset.correct === 'true';
+            const reason = chosenButton.dataset.reason;
+
+            document.querySelectorAll('.antidote-button').forEach(btn => btn.disabled = true);
+            infoPanel.style.display = 'none';
+
+            if (isCorrect) {
+                currentParticleColor = 'green';
+                setTimeout(() => {
+                    feedbackTitle.textContent = "You Won!";
+                    feedbackDescription.textContent = reason;
+                    setFeedbackButtonAction('contact'); // Setup for VCard download
+                    feedbackModal.style.display = 'block';
+                }, 7000);
+            } else {
+                currentParticleColor = 'red';
+                setTimeout(() => {
+                    feedbackTitle.textContent = "Game Over!";
+                    feedbackDescription.textContent = reason;
+                    setFeedbackButtonAction('retry'); // Setup for retry
+                    feedbackModal.style.display = 'block';
+                }, 6000);
+            }
+        }
+
+        function resetGame() {
+            feedbackModal.style.display = 'none';
+            currentParticleColor = 'orange';
+            infoPanel.style.display = 'block';
+            
+            document.querySelectorAll('.antidote-button').forEach(btn => btn.disabled = false); // Re-enable before repopulating
+            populateButtons(); // This also re-enables them as they are new buttons
+
+            // If particles should reset their positions on retry
+            // initParticles(); 
+            // If just color change, the animate loop handles it.
+            // For a full reset, re-initializing is good:
+            if (animationFrameId) cancelAnimationFrame(animationFrameId); // Stop old animation
+            initParticles(); // Reset particle positions and velocities
+            animateParticles(); // Start new animation
+
+            // Ensure the feedback button is set back to 'retry' for the next game cycle
+            // This is important if the previous game was a win.
+            setFeedbackButtonAction('retry');
+        }
+
+        function setupGame() {
+            canvas.width = gameContainer.clientWidth;
+            canvas.height = gameContainer.clientHeight;
+
+            currentParticleColor = 'orange';
+            initParticles();
+            populateButtons();
+            animateParticles();
+            setFeedbackButtonAction('retry'); // Initialize feedback button for retry
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(setupGame, 100); // Small delay for layout
+        });
+
+        window.addEventListener('resize', () => {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+             // Debounce or throttle resize events for performance if it becomes an issue
+            setupGame();
+        });
+
+    </script>
+</body>
+</html>
