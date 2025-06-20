@@ -236,12 +236,36 @@
     let currentParticleColor = 'orange';
 
     const references = [
-      "[1] WHO, “Catalogue of mutations in mycobacterium tuberculosis…”, 2023. [Online]. Available: https://www.who.int/publications/i/item/9789240082410",
-      "[2] Sandgren et al., “Tuberculosis drug resistance mutation database,” PLoS Medicine, 2009. https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000002",
-      "[3] Dai et al., “Mycoresistance: a curated resource…,” Database, 2019. https://academic.oup.com/database/article/doi/10.1093/database/baz074/5530356",
-      "[4] Kuang et al., “Prediction of TB drug resistance…,” Scientific Reports, 2022. https://www.nature.com/articles/s41598-022-06449-4",
-      "[5] Babirye et al., “Antibiotic resistance in TB from Uganda,” BMC Infectious Diseases, 2024. https://bmcinfectdis.biomedcentral.com/articles/10.1186/s12879-024-10282-7"
-    ];
+  "[1] WHO, “Catalogue of mutations in mycobacterium tuberculosis…”, 2023. [Online]. Available: https://www.who.int/publications/i/item/9789240082410",
+  "[2] Sandgren et al., “Tuberculosis drug resistance mutation database,” PLoS Medicine, 2009. https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000002",
+  "[3] Dai et al., “Mycoresistance: a curated resource…,” Database, 2019. https://academic.oup.com/database/article/doi/10.1093/database/baz074/5530356",
+  "[4] Kuang et al., “Prediction of TB drug resistance…,” Scientific Reports, 2022. https://www.nature.com/articles/s41598-022-06449-4",
+  "[5] Babirye et al., “Antibiotic resistance in TB from Uganda,” BMC Infectious Diseases, 2024. https://bmcinfectdis.biomedcentral.com/articles/10.1186/s12879-024-10282-7",
+  "[6] CRyPTIC Consortium, “Data compendium of 12,289 MTB genomes…,” PLOS Biology, 2022. https://doi.org/10.1371/journal.pbio.3001721",
+  "[7] Yang et al., “ML for classifying TB drug-resistance,” Bioinformatics, 2018.",
+  "[8] CRyPTIC & GP100 Consortium, “Genomic resistance phenotypes,” PLOS Biology, 2022. https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001721",
+  "[9] B. et al., “ML-based prediction of TB resistance in Uganda,” BMC Infectious Diseases, 2024. https://bmcinfectdis.biomedcentral.com/articles/10.1186/s12879-024-10282-7",
+  "[10] Ogunlade et al., “Raman spectroscopy and ML for TB resistance,” arXiv, 2023. https://arxiv.org/abs/2306.05653",
+  "[11] Flandrois et al., “Mubii-TB-DB: TB resistance mutation DB,” 2014.",
+  "[12] CARD, “Comprehensive Antibiotic Resistance Database,” 2023. https://card.mcmaster.ca",
+  "[13] ResFinder Team, “ResFinder Database,” 2023. https://cge.food.dtu.dk/services/ResFinder/",
+  "[14] Hall et al., “Resistance prediction with reference graphs,” Microbial Genomics, 2023. https://doi.org/10.1099/mgen.0.001081",
+  "[15] Bonin & Doster et al., “MEGARes & AMR++, v3.0,” Nucleic Acids Research, 2023. https://doi.org/10.1093/nar/gkac1047",
+  "[16] Arango-Argoty et al., “ARGminer: crowdsource AR gene curation,” Bioinformatics, 2020. https://doi.org/10.1093/bioinformatics/btaa095",
+  "[17] Wallace et al., “FARME DB: functional AR element DB,” Database, 2017. https://doi.org/10.1093/database/baw165",
+  "[18] Liu et al., “Nanopore-based TB resistance detection,” Frontiers in Microbiology, 2024. https://www.frontiersin.org/articles/10.3389/fmicb.2024.1349715/full",
+  "[19] Arango-Argoty et al., “DeepARG: DL for AR gene prediction,” Microbiome, 2018. https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-018-0401-z",
+  "[20] Stokes et al., “DL approach to antibiotic discovery,” Cell, 2023. https://www.cell.com/cell/fulltext/S0092-8674(20)30102-1",
+  "[21] Islam et al., “Computational screening of MTB Dxr inhibitors,” J. Biomolecular Structure & Dynamics, 2023. https://www.tandfonline.com/doi/full/10.1080/07391102.2023.2218933",
+  "[22] Lan et al., “Genomic & spatial analysis of TB transmission,” The Lancet Microbe, 2025. https://www.thelancet.com/journals/lanmic/article/PIIS2666-5247(25)00022-9/fulltext",
+  "[23] Heupink et al., “MAGMA: genomic analysis pipeline for MTB,” PLOS Comp Bio, 2023. https://journals.plos.org/ploscompbiol/article?id=10.1371%2Fjournal.pcbi.1011648",
+  "[24] Brown et al., “Language models are few-shot learners,” arXiv, 2020. https://arxiv.org/abs/2005.14165",
+  "[25] Conradie et al., “Treatment of highly drug-resistant TB,” NEJM, 2020.",
+  "[26] Davis et al., “PATRIC bioinformatics resource center,” Nucleic Acids Research, 2020. https://doi.org/10.1093/nar/gkz943",
+  "[27] Coll et al., “Rapid TB drug resistance determination,” Genome Medicine, 2015. https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-015-0164-0",
+  "[28] Chen & Guestrin, “XGBoost: scalable tree boosting system,” arXiv, 2016. http://arxiv.org/abs/1603.02754"
+];
+
 
     const antidotes = [
       {
