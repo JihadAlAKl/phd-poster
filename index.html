@@ -140,13 +140,54 @@
     #close-references-button:hover {
       opacity: 0.9;
     }
-    #references-list {
-      padding-left: 20px;
-    }
-    #references-list li {
-      margin-bottom: 10px;
-      font-size: 0.95em;
-    }
+    #references-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 25px;
+  border-radius: 10px;
+  z-index: 4;
+  display: none;
+  width: 90vw;
+  max-width: 480px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  text-align: left;
+}
+
+#references-list {
+  padding-left: 20px;
+  max-height: 50vh;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  font-size: 0.95em;
+}
+
+/* Hide scrollbar on WebKit browsers (Chrome, Safari) */
+#references-list::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Hide scrollbar on Firefox */
+#references-list {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#references-list::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+#references-list li {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
   </style>
 </head>
 <body>
